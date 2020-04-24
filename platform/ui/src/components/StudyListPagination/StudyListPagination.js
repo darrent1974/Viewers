@@ -8,7 +8,7 @@ const StudyListPagination = ({
   perPage,
   onChangePerPage,
 }) => {
-  const navigateToPage = page => {
+  const navigateToPage = (page) => {
     const toPage = page < 1 ? 1 : page;
     onChangePage(toPage);
   };
@@ -23,7 +23,7 @@ const StudyListPagination = ({
                 defaultValue={perPage}
                 className="block appearance-none w-full bg-transparent border border-common-active text-white text-base px-2 pr-4 rounded leading-tight focus:outline-none"
                 style={{ height: 28 }}
-                onChange={e => onChangePerPage(e.target.value)}
+                onChange={(e) => onChangePerPage(e.target.value)}
                 onBlur={() => {}}
               >
                 <option value="25">25</option>
@@ -47,27 +47,22 @@ const StudyListPagination = ({
               <Typography className="opacity-60 mr-4 text-base">
                 Page {currentPage}
               </Typography>
-              <ButtonGroup color="primary">
-                <IconButton
-                  size="small"
-                  className="border-common-active px-4 py-2 text-base"
-                  style={{ padding: '3px 12px', minWidth: 0 }}
+              <ButtonGroup>
+                <Button
+                  size="inherit"
+                  className="border-common-active px-2 py-2 text-base"
                   color="white"
                   onClick={() => navigateToPage(1)}
-                >
-                  <>{`<<`}</>
-                </IconButton>
+                >{`<<`}</Button>
                 <Button
-                  size="small"
-                  className="border-common-active py-2 text-base"
-                  style={{ padding: '3px 8px', minWidth: 0 }}
+                  size="inherit"
+                  className="border-common-active py-2 px-2 text-base"
                   color="white"
                   onClick={() => navigateToPage(currentPage - 1)}
                 >{`< Previous`}</Button>
                 <Button
-                  size="small"
-                  className="border-common-active py-2 text-base"
-                  style={{ padding: '3px 20px', minWidth: 0 }}
+                  size="inherit"
+                  className="border-common-active py-2 px-4 text-base"
                   color="white"
                   onClick={() => navigateToPage(currentPage + 1)}
                 >

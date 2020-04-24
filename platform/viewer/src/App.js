@@ -1,14 +1,11 @@
 import React from 'react';
-import { ThemeWrapper } from '@ohif/ui';
+import { BrowserRouter, HashRouter } from 'react-router-dom';
+import routes from './routes';
 
-import ConnectedStudyList from './connectedComponents/ConnectedStudyList';
-
-const App = () => {
-  return (
-    <ThemeWrapper>
-      <ConnectedStudyList />
-    </ThemeWrapper>
-  );
-};
+function App() {
+  const shouldUseHashRouter = JSON.parse(process.env.REACT_APP_USE_HASH_ROUTER);
+  const RouterComponent = shouldUseHashRouter ? HashRouter : BrowserRouter;
+  return <RouterComponent>{routes()}</RouterComponent>;
+}
 
 export default App;

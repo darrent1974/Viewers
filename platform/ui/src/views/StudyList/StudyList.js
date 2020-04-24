@@ -6,107 +6,105 @@ import classnames from 'classnames';
 import moment from 'moment';
 
 import {
-  EmptyStudies,
   utils,
   Icon,
   StudyListExpandedRow,
   Button,
-  StudyListPagination,
+  NavBar,
+  Svg,
+  IconButton,
+  EmptyStudies,
   StudyListTable,
+  StudyListPagination,
 } from '@ohif/ui';
 
 // fix imports after refactor
-import Header from './components/Header';
 import StudyListFilter from './components/StudyListFilter';
 
-const filtersMeta = [
-  {
-    name: 'patientName',
-    displayName: 'Patient Name',
-    inputType: 'Text',
-    isSortable: true,
-    gridCol: 4,
-  },
-  {
-    name: 'mrn',
-    displayName: 'MRN',
-    inputType: 'Text',
-    isSortable: true,
-    gridCol: 2,
-  },
-  {
-    name: 'studyDate',
-    displayName: 'Study date',
-    inputType: 'DateRange',
-    isSortable: true,
-    gridCol: 5,
-  },
-  {
-    name: 'description',
-    displayName: 'Description',
-    inputType: 'Text',
-    isSortable: true,
-    gridCol: 4,
-  },
-  {
-    name: 'modality',
-    displayName: 'Modality',
-    inputType: 'MultiSelect',
-    inputProps: {
-      options: [
-        { value: 'SEG', label: 'SEG' },
-        { value: 'CT', label: 'CT' },
-        { value: 'MR', label: 'MR' },
-        { value: 'SR', label: 'SR' },
-      ],
-    },
-    isSortable: true,
-    gridCol: 3,
-  },
-  {
-    name: 'accession',
-    displayName: 'Accession',
-    inputType: 'Text',
-    isSortable: true,
-    gridCol: 4,
-  },
-  {
-    name: 'instances',
-    displayName: 'Instances',
-    inputType: 'None',
-    isSortable: true,
-    gridCol: 2,
-  },
-];
-
-const defaultFilterValues = {
-  patientName: '',
-  mrn: '',
-  studyDate: {
-    startDate: null,
-    endDate: null,
-  },
-  description: '',
-  modality: undefined,
-  accession: '',
-  sortBy: '',
-  sortDirection: 'none',
-  page: 0,
-  resultsPerPage: 25,
-};
-
-const isFiltering = (filterValues, defaultFilterValues) => {
-  return Object.keys(defaultFilterValues).some((name) => {
-    return filterValues[name] !== defaultFilterValues[name];
-  });
-};
-
 const StudyList = () => {
+  const defaultFilterValues = {
+    patientName: '',
+    mrn: '',
+    studyDate: {
+      startDate: null,
+      endDate: null,
+    },
+    description: '',
+    modality: undefined,
+    accession: '',
+    sortBy: '',
+    sortDirection: 'none',
+    page: 0,
+    resultsPerPage: 25,
+  };
   const [filterValues, setFilterValues] = useState(defaultFilterValues);
-  const studies = utils.getMockedStudies();
+  const studies = utils.getMockedStudies(100);
   const numOfStudies = studies.length;
   const [expandedRows, setExpandedRows] = useState([]);
-
+  const filtersMeta = [
+    {
+      name: 'patientName',
+      displayName: 'Patient Name',
+      inputType: 'Text',
+      isSortable: true,
+      gridCol: 4,
+    },
+    {
+      name: 'mrn',
+      displayName: 'MRN',
+      inputType: 'Text',
+      isSortable: true,
+      gridCol: 2,
+    },
+    {
+      name: 'studyDate',
+      displayName: 'Study date',
+      inputType: 'DateRange',
+      isSortable: true,
+      gridCol: 5,
+    },
+    {
+      name: 'description',
+      displayName: 'Description',
+      inputType: 'Text',
+      isSortable: true,
+      gridCol: 4,
+    },
+    {
+      name: 'modality',
+      displayName: 'Modality',
+      inputType: 'MultiSelect',
+      inputProps: {
+        options: [
+          { value: 'SEG', label: 'SEG' },
+          { value: 'CT', label: 'CT' },
+          { value: 'MR', label: 'MR' },
+          { value: 'SR', label: 'SR' },
+        ],
+      },
+      isSortable: true,
+      gridCol: 3,
+    },
+    {
+      name: 'accession',
+      displayName: 'Accession',
+      inputType: 'Text',
+      isSortable: true,
+      gridCol: 4,
+    },
+    {
+      name: 'instances',
+      displayName: 'Instances',
+      inputType: 'None',
+      isSortable: true,
+      gridCol: 2,
+    },
+  ];
+  const isFiltering = (filterValues, defaultFilterValues) => {
+    return Object.keys(defaultFilterValues).some((name) => {
+      return filterValues[name] !== defaultFilterValues[name];
+    });
+  };
   const tableDataSource = studies.map((study, key) => {
     const rowKey = key + 1;
     const isExpanded = expandedRows.some((k) => k === rowKey);
@@ -120,14 +118,12 @@ const StudyList = () => {
       StudyDate,
       series,
     } = study;
-
     const seriesTableColumns = {
       description: 'Description',
       seriesNumber: 'Series',
       modality: 'Modality',
       Instances: 'Instances',
     };
-
     const seriesTableDataSource = series.map((seriesItem) => {
       const { SeriesNumber, Modality, instances } = seriesItem;
       return {
@@ -137,7 +133,6 @@ const StudyList = () => {
         Instances: instances.length,
       };
     });
-
     return {
       row: [
         {
@@ -190,8 +185,8 @@ const StudyList = () => {
           content: (
             <>
               <Icon
-                name="series-active"
-                className={classnames('inline-flex mr-2', {
+                name="group-layers"
+                className={classnames('inline-flex mr-2 w-4', {
                   'text-primary-active': isExpanded,
                   'text-secondary-light': !isExpanded,
                 })}
@@ -212,6 +207,7 @@ const StudyList = () => {
             variant="contained"
             className="mr-4 font-bold"
             endIcon={<Icon name="launch-arrow" style={{ color: '#21a7c6' }} />}
+            onClick={() => (window.location.pathname = '/viewer/123')}
           >
             Basic Viewer
           </Button>
@@ -244,7 +240,6 @@ const StudyList = () => {
       isExpanded,
     };
   });
-
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(25);
   const totalPages = Math.floor(numOfStudies / perPage);
@@ -258,44 +253,68 @@ const StudyList = () => {
     setPerPage(perPage);
     setCurrentPage(1);
   };
-
   const hasStudies = numOfStudies > 0;
-
   return (
-    <div
-      className={classnames('bg-black h-full', {
-        'h-screen': !hasStudies,
-      })}
-    >
-      <Header />
-      <StudyListFilter
-        numOfStudies={numOfStudies}
-        filtersMeta={filtersMeta}
-        filterValues={filterValues}
-        setFilterValues={setFilterValues}
-        clearFilters={() => setFilterValues(defaultFilterValues)}
-        isFiltering={isFiltering(filterValues, defaultFilterValues)}
-      />
-
-      {hasStudies ? (
-        <>
-          <StudyListTable
-            tableDataSource={tableDataSource}
-            numOfStudies={numOfStudies}
-            filtersMeta={filtersMeta}
-          />
-          <StudyListPagination
-            onChangePage={onChangePage}
-            onChangePerPage={onChangePerPage}
-            currentPage={currentPage}
-            perPage={perPage}
-          />
-        </>
-      ) : (
-        <div className="flex flex-col items-center justify-center pt-48">
-          <EmptyStudies />
-        </div>
-      )}
+    <div>
+      <div
+        className={classnames('bg-black h-full', {
+          'h-screen': !hasStudies,
+        })}
+      >
+        <NavBar className="justify-between border-b-4 border-black" isSticky>
+          <div className="flex items-center">
+            <div className="mx-3">
+              <Svg name="logo-ohif" />
+            </div>
+          </div>
+          <div className="flex items-center">
+            <span className="mr-3 text-common-light text-lg">
+              FOR INVESTIGATIONAL USE ONLY
+            </span>
+            <IconButton
+              variant="text"
+              color="inherit"
+              className="text-primary-active"
+              onClick={() => {}}
+            >
+              <React.Fragment>
+                <Icon name="settings" />
+                <Icon name="chevron-down" />
+              </React.Fragment>
+            </IconButton>
+          </div>
+        </NavBar>
+        <StudyListFilter
+          numOfStudies={numOfStudies}
+          filtersMeta={filtersMeta}
+          filterValues={filterValues}
+          setFilterValues={setFilterValues}
+          clearFilters={() => setFilterValues(defaultFilterValues)}
+          isFiltering={isFiltering(filterValues, defaultFilterValues)}
+        />
+        {hasStudies ? (
+          <>
+            <StudyListTable
+              tableDataSource={tableDataSource.slice(
+                (currentPage - 1) * perPage,
+                (currentPage - 1) * perPage + perPage
+              )}
+              numOfStudies={numOfStudies}
+              filtersMeta={filtersMeta}
+            />
+            <StudyListPagination
+              onChangePage={onChangePage}
+              onChangePerPage={onChangePerPage}
+              currentPage={currentPage}
+              perPage={perPage}
+            />
+          </>
+        ) : (
+          <div className="flex flex-col items-center justify-center pt-48">
+            <EmptyStudies />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

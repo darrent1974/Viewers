@@ -10,7 +10,7 @@ const StudyListExpandedRow = ({
 }) => {
   return (
     <div className="w-full bg-black py-4 pl-12 pr-2">
-      <div className="block">{children}</div>
+      <div className="inline-flex items-center">{children}</div>
       <div className="mt-4">
         <Table>
           <TableHead>
